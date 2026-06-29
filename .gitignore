@@ -1,0 +1,18 @@
+# vscode
+.vscode 
+
+# intellij
+*.iml
+.idea
+
+# npm
+node_modules
+
+# release builds are attached to github releases
+main.js
+
+# sourcemaps
+*.map
+
+# obsidian
+data.json

@@ -1,0 +1,10 @@
+{
+	"id": "graph-save",
+	"name": "Graph Save",
+	"version": "0.1.0",
+	"minAppVersion": "1.12.3",
+	"description": "Automatically saves and restores graph node positions.",
+	"author": "Mani Tofigh",
+	"authorUrl": "https://github.com/manitofigh",
+	"isDesktopOnly": true
+}
