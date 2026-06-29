@@ -13,6 +13,6 @@ export function showNotice(message: string) {
 }
 
 function getContainer(): HTMLElement {
-	return document.body.querySelector('.graph-save-notice-container')
-		|| document.body.createDiv({ cls: 'graph-save-notice-container' });
+	return activeDocument.body.querySelector('.graph-save-notice-container')
+		|| activeDocument.body.createDiv({ cls: 'graph-save-notice-container' });
 }

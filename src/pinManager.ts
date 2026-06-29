@@ -64,7 +64,8 @@ export class PinManager {
 		const worker = this.getGraphParts(graphLeaf)?.worker;
 		if (!worker || worker.__graphSavePinPatched) return;
 
-		const originalPostMessage = worker.postMessage.bind(worker);
+		const postMessage = worker.postMessage;
+		const originalPostMessage = (message: GraphWorkerMessage) => postMessage.call(worker, message);
 		this.originalPostMessages.set(worker, originalPostMessage);
 
 		worker.postMessage = (message: GraphWorkerMessage) => {

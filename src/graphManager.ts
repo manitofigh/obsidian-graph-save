@@ -259,7 +259,7 @@ export class GraphManager {
 
 	private getInitialGraphOptions(saved: GraphData): GraphOptions {
 		const { options } = saved;
-		if (options && options.hasOwnProperty('search')) {
+		if (Object.keys(options).includes('search')) {
 			return options;
 		}
 		return {};
@@ -581,13 +581,15 @@ export class GraphManager {
 		if (!this.settings.enableAutoSave) return;
 
 		SHUFFLE_SAVE_DELAYS_MS.forEach((delay, index) => {
-			window.setTimeout(async () => {
+			window.setTimeout(() => {
 				if (this.shuffleRunIds.get(graphLeaf) !== runId) return;
 
-				await this.flushAutoSaveNow(graphLeaf, { allowDuringShuffle: true });
-				if (index === SHUFFLE_SAVE_DELAYS_MS.length - 1) {
-					this.shuffleSavingLeaves.delete(graphLeaf);
-				}
+				void this.flushAutoSaveNow(graphLeaf, { allowDuringShuffle: true })
+					.then(() => {
+						if (index === SHUFFLE_SAVE_DELAYS_MS.length - 1) {
+							this.shuffleSavingLeaves.delete(graphLeaf);
+						}
+					});
 			}, delay);
 		});
 	}
@@ -674,8 +676,8 @@ export class GraphManager {
 		this.autoSaveLastSignature = graphLeaf ? this.getLeafSignature(graphLeaf) : null;
 		const intervalMs = this.getAutoSaveIntervalMs();
 
-		this.autoSaveInterval = window.setInterval(async () => {
-			await this.flushAutoSaveNow();
+		this.autoSaveInterval = window.setInterval(() => {
+			void this.flushAutoSaveNow();
 		}, intervalMs);
 	}
 

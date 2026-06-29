@@ -175,7 +175,11 @@ export class GraphSaveSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.enableAutoSave)
 				.onChange((value) => {
 					this.update('enableAutoSave', value);
-					value ? this.plugin.graphManager.startAutoSave() : this.plugin.graphManager.stopAutoSave();
+					if (value) {
+						this.plugin.graphManager.startAutoSave();
+					} else {
+						this.plugin.graphManager.stopAutoSave();
+					}
 					this.display();
 				}));
 

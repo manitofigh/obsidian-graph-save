@@ -23,8 +23,8 @@ export default class GraphSavePlugin extends Plugin {
 		if (this.settings.enableAutoSave) this.graphManager.startAutoSave();
 	}
 
-	async onunload() {
-		await this.graphManager.shutdownAutoSave();
+	onunload() {
+		void this.graphManager.shutdownAutoSave();
 		this.app.workspace
 			.getLeavesOfType('graph')
 			.forEach((leaf) => {
@@ -92,12 +92,12 @@ export default class GraphSavePlugin extends Plugin {
 		this.addCommand({
 			id: 'shuffle-layout',
 			name: 'Shuffle graph layout',
-			callback: async () => {
+			callback: () => {
 				if (!this.graphManager.shuffleLayout()) {
 					showNotice('Graph Save: no graph view found');
 					return;
 				}
-				await this.saveSettings();
+				void this.saveSettings();
 				showNotice('Graph Save: layout shuffled');
 			},
 		});

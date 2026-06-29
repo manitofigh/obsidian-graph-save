@@ -86,25 +86,29 @@ export class SnapshotHistoryModal extends Modal {
 			.addButton((button) => button
 				.setButtonText('Restore')
 				.setCta()
-				.onClick(async () => {
-					if (!this.graphManager.restoreSnapshot(snapshot.id, this.graphLeaf)) {
-						showNotice('Graph Save: could not restore snapshot');
-						return;
-					}
-					await this.plugin.saveSettings();
-					showNotice('Graph Save: snapshot restored');
-					this.close();
-				}))
+				.onClick(() => void this.restoreSnapshot(snapshot)))
 			.addButton((button) => button
 				.setButtonText('Rename')
 				.onClick(() => new RenameSnapshotModal(this.plugin, this.graphManager, snapshot, () => this.render()).open()))
 			.addButton((button) => button
 				.setButtonText('Delete')
-				.onClick(async () => {
-					this.graphManager.deleteSnapshot(snapshot.id);
-					await this.plugin.saveSettings();
-					this.render();
-				}));
+				.onClick(() => void this.deleteSnapshot(snapshot)));
+	}
+
+	private async restoreSnapshot(snapshot: GraphSnapshot) {
+		if (!this.graphManager.restoreSnapshot(snapshot.id, this.graphLeaf)) {
+			showNotice('Graph Save: could not restore snapshot');
+			return;
+		}
+		await this.plugin.saveSettings();
+		showNotice('Graph Save: snapshot restored');
+		this.close();
+	}
+
+	private async deleteSnapshot(snapshot: GraphSnapshot) {
+		this.graphManager.deleteSnapshot(snapshot.id);
+		await this.plugin.saveSettings();
+		this.render();
 	}
 
 	private formatDate(timestamp: number): string {

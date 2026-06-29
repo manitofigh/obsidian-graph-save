@@ -19,12 +19,12 @@ export function addGraphActions(leaf: CustomLeaf, graphManager: GraphManager, pl
 	const restoreButton = createAction('rotate-ccw', 'Graph Save: restore snapshot', RESTORE_BUTTON_CLASS, () =>
 		new SnapshotHistoryModal(plugin, graphManager, leaf).open());
 
-	const shuffleButton = createAction('shuffle', 'Graph Save: shuffle layout', SHUFFLE_BUTTON_CLASS, async () => {
+	const shuffleButton = createAction('shuffle', 'Graph Save: shuffle layout', SHUFFLE_BUTTON_CLASS, () => {
 		if (!graphManager.shuffleLayout(leaf)) {
 			showNotice('Graph Save: no graph view found');
 			return;
 		}
-		await plugin.saveSettings();
+		void plugin.saveSettings();
 		showNotice('Graph Save: layout shuffled');
 	});
 
@@ -38,7 +38,7 @@ export function removeGraphActions(leaf: CustomLeaf) {
 }
 
 function createAction(icon: string, label: string, className: string, onClick: () => void) {
-	const button = document.createElement('div');
+	const button = activeDocument.createElement('div');
 	button.className = `clickable-icon view-action ${className}`;
 	button.setAttribute('aria-label', label);
 	setIcon(button, icon);
