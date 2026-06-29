@@ -32,7 +32,7 @@ Graph Save uses private graph internals, so an Obsidian update may require a plu
 
 ## Community Plugins
 
-Working on it...
+https://community.obsidian.md/plugins/graph-save
 
 ## Install Manually
 
