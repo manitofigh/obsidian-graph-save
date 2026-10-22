@@ -61,7 +61,7 @@ export class GraphManager {
 	private autoSaveInterval: number | null = null;
 	private autoSaveInFlight = false;
 	private autoSaveLastSignature: string | null = null;
-	private autoRestoredLeaves = new WeakSet<CustomLeaf>();
+	private autoRestoredViews = new WeakSet<object>();
 	private restoringLeaves = new WeakSet<CustomLeaf>();
 	private restoreRunIds = new WeakMap<CustomLeaf, number>();
 	private shuffleRunIds = new WeakMap<CustomLeaf, number>();
@@ -215,7 +215,7 @@ export class GraphManager {
 		const graph = this.getGraphInternals(graphLeaf);
 		if (!graph) return false;
 
-		this.autoRestoredLeaves.add(graphLeaf);
+		this.autoRestoredViews.add(graphLeaf.view);
 		this.restoreRunIds.set(graphLeaf, (this.restoreRunIds.get(graphLeaf) || 0) + 1);
 		this.restoringLeaves.delete(graphLeaf);
 		this.pinManager.unlockNodes(graphLeaf);
@@ -234,7 +234,7 @@ export class GraphManager {
 		if (!this.settings.automaticallyRestoreNodePositions) {
 			return;
 		}
-		if (this.autoRestoredLeaves.has(graphLeaf)) {
+		if (this.autoRestoredViews.has(graphLeaf.view)) {
 			return;
 		}
 
@@ -243,11 +243,12 @@ export class GraphManager {
 			return;
 		}
 
-		this.autoRestoredLeaves.add(graphLeaf);
-
-		const initOptions = this.getInitialGraphOptions(saved);
 		const graph = this.getGraphInternals(graphLeaf);
 		if (!graph) return;
+
+		this.autoRestoredViews.add(graphLeaf.view);
+
+		const initOptions = this.getInitialGraphOptions(saved);
 
 		graph.dataEngine.setOptions({
 			...initOptions,

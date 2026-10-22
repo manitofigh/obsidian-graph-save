@@ -9,7 +9,7 @@ import { CustomLeaf } from './types';
 export default class GraphSavePlugin extends Plugin {
 	settings!: GraphSaveSettings;
 	graphManager!: GraphManager;
-	private graphLeafEvents = new WeakSet<CustomLeaf>();
+	private graphViewEvents = new WeakSet<object>();
 
 	async onload() {
 		await this.loadSettings();
@@ -47,8 +47,8 @@ export default class GraphSavePlugin extends Plugin {
 	}
 
 	private registerGraphLeafEvents(leaf: CustomLeaf) {
-		if (this.graphLeafEvents.has(leaf)) return;
-		this.graphLeafEvents.add(leaf);
+		if (this.graphViewEvents.has(leaf.view)) return;
+		this.graphViewEvents.add(leaf.view);
 
 		this.registerDomEvent(leaf.view.containerEl, 'pointerup', () => {
 			if (this.settings.enableAutoSave) void this.graphManager.flushAutoSaveNow();
